@@ -53,7 +53,7 @@ The fastest way to run the service with its PostgreSQL database:
 
 ```bash
 # 1. Clone your repo
-git clone https://github.com/<your-username>/phoenix-realtime-chat.git
+git clone https://github.com/ibrahimkimaro/realtime-chat.git
 cd phoenix-realtime-chat
 
 # 2. Copy environment file
