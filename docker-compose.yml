@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: realtime-chat-db
+    environment:
+      POSTGRES_USER: chat_user
+      POSTGRES_PASSWORD: chat_password
+      POSTGRES_DB: realtime_chat_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init_schema.sql:/docker-entrypoint-initdb.d/init_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chat_user -d realtime_chat_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  realtime_chat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: realtime-chat-server
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      MIX_ENV: dev
+      PORT: 4000
+      DATABASE_URL: "postgres://chat_user:chat_password@db:5432/realtime_chat_db"
+      SECRET_KEY: "change-this-to-a-secure-secret-key-in-production"
+      BACKEND_URL: "http://host.docker.internal:8000"
+      # TURN_SECRET: "your-turn-secret-if-using-coturn"
+      # TURN_HOST: "turn.yourdomain.com"
+      # TURN_PORT: 3478
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

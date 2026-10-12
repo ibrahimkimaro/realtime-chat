@@ -1,0 +1,19 @@
+# Elixir / Phoenix build artifacts
+/_build/
+/deps/
+/*.beam
+/.elixir_ls/
+
+# Environment and sensitive data
+.env
+.env.local
+*.secret.exs
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Benchmarks / dumps
+*.dump
